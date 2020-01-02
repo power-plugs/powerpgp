@@ -82,11 +82,22 @@ module.exports = class PowerPGP extends Plugin {
                             });
                         } else {
                             console.error(err);
+                            return err;
                         }
+                    });
+                } else {
+                    var params = {
+                        msg: text,
+                        signing_key: key.find_signing_pgp_key(),
+                    };
+                    
+                    kbpgp.clearsign(params, function (err, msg) {
+                        callback("```" + msg + "```");
                     });
                 }
             } else {
                 console.error(err);
+                return err;
             }
         });
     };
