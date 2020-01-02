@@ -61,10 +61,6 @@ module.exports = class PowerPGP extends Plugin {
         });
     }
 
-    pgp2sign(text, pgp) {
-        pgp = pgp.replace("Version: Keybase OpenPGP v2.1.0\nComment: https://keybase.io/verify", "").replace("MESSAGE", "SIGNATURE").replace("MESSAGE", "SIGNATURE");
-    }
-
     sign(text, callback) {
         var settings = this.settings;
         kbpgp.KeyManager.import_from_armored_pgp({
