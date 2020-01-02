@@ -1,7 +1,8 @@
 {
-  "name": "JoJo",
+  "name": "Powercord PGP",
   "version": "1.0.0",
-  "description": "<JoJo Reference>",
+  "description": "Sign messages using OpenPGP. (Powered by keybase.io/kbpgp)",
   "author": "Lil Sizzurp",
-  "license": "MIT"
+  "license": "MIT",
+  "icons": [{"info": "only here because vscode gives warning otherwise"}]
 }
