@@ -4,5 +4,6 @@
   "description": "Sign messages using OpenPGP. (Powered by keybase.io/kbpgp)",
   "author": "Lil Sizzurp",
   "license": "MIT",
+  "repo": "https://github.com/LilSizzurp/powerpgp",
   "icons": [{"info": "only here because vscode gives warning otherwise"}]
 }
