@@ -24,11 +24,11 @@ module.exports = class PowerPGP extends Plugin {
             }, false);
         }
 
-        this.registerCommand('clearsign', [], 'Clearsign text using PGP', '', (args) => {
+        this.registerCommand('sign', [], 'Sign text using PGP', '', (args) => {
             this.sign(args.join(" "), true, sendMessage);
         });
 
-        this.registerCommand('sign', [], 'Sign text using PGP', '', (args) => {
+        this.registerCommand('box', [], 'Sign text using PGP', '', (args) => {
             this.sign(args.join(" "), false, sendMessage);
         });
     }
