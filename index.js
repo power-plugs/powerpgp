@@ -13,20 +13,23 @@ module.exports = class PowerPGP extends Plugin {
             settings: this.settings
         }));
 
+        const sendMessage = text => {
+            const c = require('powercord/webpack').channels.getChannelId();
+            const upload = getModule(['instantBatchUpload'], false).upload;
+            const final = new File([this.settings.get("pubkey")], 'public.key');
+            upload(c, final, {
+                content: "```" + text + "```",
+                invalidEmojis: [],
+                tts: false
+            }, false);
+        }
+
+        this.registerCommand('clearsign', [], 'Clearsign text using PGP', '', (args) => {
+            this.sign(args.join(" "), true, sendMessage);
+        });
+
         this.registerCommand('sign', [], 'Sign text using PGP', '', (args) => {
-            var c = require('powercord/webpack').channels.getChannelId();
-            if (!this.settings.get("privkey") && !this.settings.get("pubkey") && !this.generating) return this.genKeys();
-            if (!this.settings.get("privkey") && !this.settings.get("pubkey") && this.generating) return;
-            var sendMessage = text => {
-                const upload = getModule(['instantBatchUpload'], false).upload;
-                const final = new File([this.settings.get("pubkey")], 'public.key');
-                upload(c, final, {
-                    content: text,
-                    invalidEmojis: [],
-                    tts: false
-                }, false);
-            }
-            this.sign(args.join(" "), sendMessage);
+            this.sign(args.join(" "), false, sendMessage);
         });
     }
 
@@ -61,7 +64,10 @@ module.exports = class PowerPGP extends Plugin {
         });
     }
 
-    sign(text, callback) {
+    sign(text, clear, callback) {
+        if (!this.settings.get("privkey") && !this.settings.get("pubkey") && !this.generating) this.genKeys();
+        if (!this.settings.get("privkey") && !this.settings.get("pubkey")) return;
+        var sign = clear ? "clearsign" : "box";
         var settings = this.settings;
         kbpgp.KeyManager.import_from_armored_pgp({
             armored: settings.get("privkey")
@@ -77,8 +83,13 @@ module.exports = class PowerPGP extends Plugin {
                                 signing_key: key.find_signing_pgp_key(),
                             };
 
-                            kbpgp.clearsign(params, function (err, msg) {
-                                callback("```" + msg + "```");
+                            kbpgp[sign](params, function (err, msg) {
+                                if(!err) {
+                                    callback(msg);
+                                } else {
+                                    console.log(err);
+                                    return err;
+                                }
                             });
                         } else {
                             console.error(err);
@@ -90,9 +101,14 @@ module.exports = class PowerPGP extends Plugin {
                         msg: text,
                         signing_key: key.find_signing_pgp_key(),
                     };
-                    
-                    kbpgp.clearsign(params, function (err, msg) {
-                        callback("```" + msg + "```");
+
+                    kbpgp[sign](params, function (err, msg) {
+                        if(!err) {
+                            callback(msg);
+                        } else {
+                            console.log(err);
+                            return err;
+                        }
                     });
                 }
             } else {
