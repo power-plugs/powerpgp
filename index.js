@@ -9,9 +9,13 @@ module.exports = class PowerPGP extends Plugin {
     generating = false;
 
     startPlugin() {
-        this.registerSettings('pc-powerpgp', 'PGP Config', () => React.createElement(Settings, {
-            settings: this.settings
-        }));
+        var SettingsComponent = () => React.createElement(Settings, {settings: this.settings});
+
+        powercord.api.settings.registerSettings('pc-powerpgp', {
+            category: this.entityID,
+            label: 'PGP Config',
+            render: SettingsComponent
+        })
 
         const sendMessage = text => {
             const c = require('powercord/webpack').channels.getChannelId();
@@ -24,13 +28,21 @@ module.exports = class PowerPGP extends Plugin {
             }, false);
         }
 
-        this.registerCommand('sign', [], 'Sign text using PGP', '', (args) => {
-            this.sign(args.join(" "), true, sendMessage);
-        });
+        powercord.api.commands.registerCommand({
+            command: 'sign',
+            aliases: [],
+            description: 'Sign text using PGP',
+            usage: '{c} text',
+            executor: (args) => ({ send: true, result: this.sign(args.join(" "), true, sendMessage) })
+        })
 
-        this.registerCommand('box', [], 'Sign text using PGP', '', (args) => {
-            this.sign(args.join(" "), false, sendMessage);
-        });
+        powercord.api.commands.registerCommand({
+            command: 'box',
+            aliases: [],
+            description: 'Sign text using PGP',
+            usage: '{c} text',
+            executor: (args) => ({ send: true, result: this.sign(args.join(" "), false, sendMessage) })
+        })
     }
 
     genKeys() {
