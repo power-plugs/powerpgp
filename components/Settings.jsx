@@ -1,6 +1,6 @@
-const { React } = require('powercord/webpack');
+const { React, getModuleByDisplayName } = require('powercord/webpack');
 const { TextInput } = require('powercord/components/settings');
-const { Card } = require('powercord/components');
+const { Card, AsyncComponent } = require('powercord/components');
 const TextArea = require("./TextArea")
 const FormText = AsyncComponent.from(getModuleByDisplayName('FormText'));
 
