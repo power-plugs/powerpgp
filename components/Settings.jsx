@@ -2,6 +2,7 @@ const { React } = require('powercord/webpack');
 const { TextInput } = require('powercord/components/settings');
 const { Card } = require('powercord/components');
 const TextArea = require("./TextArea")
+const FormText = AsyncComponent.from(getModuleByDisplayName('FormText'));
 
 module.exports = class Settings extends React.Component {
     constructor(props) {
