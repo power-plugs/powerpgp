@@ -19,7 +19,7 @@ module.exports = class Settings extends React.Component {
                 <TextInput type="password" autoCorrect="off" value={this.settings.get("passphrase")} onChange={val => this.settings.set("passphrase", val)} readonly={true}>Passphrase</TextInput>
                 <Card style={{"padding":"18px"}}>
                     <FormText>
-                        Feel free to check out some of my other plugins on <a href="https://github.com/LilSizzurp?tab=repositories&q=power" target="_BLANK">GitHub</a>!
+                        Feel free to check out some of my other plugins on <a href="https://github.com/power-plugs?tab=repositories" target="_BLANK">GitHub</a>!
                     </FormText>
                 </Card>
             </div>
